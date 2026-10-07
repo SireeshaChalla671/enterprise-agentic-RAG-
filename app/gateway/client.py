@@ -1,3 +1,4 @@
+import os
 import logfire
 from portkey_ai import Portkey, createHeaders, PORTKEY_GATEWAY_URL
 from langchain_openai import ChatOpenAI
@@ -22,9 +23,15 @@ GATEWAY_CONFIG = {
     ]
 }
 
+# If your Portkey workspace has "block inline config" enabled, inline configs are rejected.
+# In that case, save the config above in the Portkey dashboard (Configs -> Create) and set
+# PORTKEY_CONFIG_ID="pc-..." in your environment / Streamlit secrets.
+PORTKEY_CONFIG_ID = os.getenv("PORTKEY_CONFIG_ID")
+ACTIVE_CONFIG = PORTKEY_CONFIG_ID if PORTKEY_CONFIG_ID else GATEWAY_CONFIG
+
 portkey_client = Portkey(
     api_key=settings.PORTKEY_API_KEY,
-    config=GATEWAY_CONFIG
+    config=ACTIVE_CONFIG
 )
 
 
@@ -46,7 +53,7 @@ def get_langchain_llm(feature: str = "rag") -> ChatOpenAI:
         temperature=0,
         default_headers=createHeaders(
             api_key=settings.PORTKEY_API_KEY,
-            config=GATEWAY_CONFIG,
+            config=ACTIVE_CONFIG,
             metadata={
                 "feature": feature,
                 "_user": "rag-system",
