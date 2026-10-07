@@ -1,18 +1,23 @@
-# Slim production requirements: only what the FastAPI API actually imports.
-# (Ingestion/eval/Google Cloud packages removed - they caused pip conflicts
-#  and are not used by app.main.)
+# Slim production requirements: what the FastAPI API needs at runtime.
+# (Google Cloud / SQL / Redis / ingestion parsers removed.)
 
 # --- API ---
 fastapi==0.136.1
 uvicorn[standard]==0.46.0
 python-dotenv==1.2.2
 pydantic==2.13.4
+requests==2.33.1
+numpy==2.4.4
 
 # --- AGENT ORCHESTRATION / LLM ---
+langchain==1.2.18
+langchain-community==0.4.1
 langgraph==1.1.10
 langchain-groq==1.1.2
 langchain-openai==1.2.1
 langchain-google-genai
+dataclasses-json
+langsmith==0.8.3
 
 # --- GUARDRAILS ---
 nemoguardrails==0.21.0
